@@ -1,0 +1,32 @@
+{
+  "name": "million-items-fullstack",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,web -c blue,magenta \"npm run dev -w @million/server\" \"npm run dev -w @million/web\"",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "build": "npm run build -w @million/shared && npm run build -w @million/server && npm run build -w @million/web",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "predev": "npm run build -w @million/shared"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.4.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.1"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
