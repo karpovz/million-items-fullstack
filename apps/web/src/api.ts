@@ -29,6 +29,13 @@ export function getPage(
   });
 }
 export const getState = () => request<StateResponse>("/api/state");
+function createOperationId() {
+  // getRandomValues доступен и по HTTP, в отличие от randomUUID.
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join(
+    "",
+  );
+}
 const post = (url: string, body: unknown) =>
   request<MutationResponse>(url, {
     method: "POST",
@@ -36,12 +43,12 @@ const post = (url: string, body: unknown) =>
     body: JSON.stringify(body),
   });
 export const selectId = (id: ItemId, selected: boolean) =>
-  post("/api/selection", { operationId: crypto.randomUUID(), id, selected });
+  post("/api/selection", { operationId: createOperationId(), id, selected });
 export const addIds = (ids: ItemId[]) =>
-  post("/api/items", { operationId: crypto.randomUUID(), ids });
+  post("/api/items", { operationId: createOperationId(), ids });
 export const reorderIds = (search: string, activeId: ItemId, overId: ItemId) =>
   post("/api/reorder", {
-    operationId: crypto.randomUUID(),
+    operationId: createOperationId(),
     search,
     activeId,
     overId,

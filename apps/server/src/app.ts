@@ -127,7 +127,17 @@ export function createService(staticDir?: string) {
     return true;
   };
   app.disable("x-powered-by");
-  app.use(helmet());
+  // Приложение доступно по HTTP на IP-адресе, без TLS перед Express.
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: { upgradeInsecureRequests: null },
+      },
+      crossOriginOpenerPolicy: false,
+      originAgentCluster: false,
+      strictTransportSecurity: false,
+    }),
+  );
   app.use(cors());
   app.use(express.json({ limit: "32kb" }));
   app.get("/health", (_req, res) => {
